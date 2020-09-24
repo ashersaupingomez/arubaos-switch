@@ -1,6 +1,6 @@
 {
   "name": "arubaos-switch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
   "main": "lib",
   "scripts": {

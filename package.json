@@ -2,8 +2,7 @@
   "name": "arubaos-switch",
   "version": "1.0.0",
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
-  "main": "lib/index.js",
-  "module": "lib/main.js",
+  "main": "lib",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,7 +22,6 @@
     "eslint-plugin-import": "^2.22.0"
   },
   "dependencies": {
-    "esm": "^3.2.25",
     "superagent": "^6.1.0",
     "superagent-prefix": "0.0.2"
   }

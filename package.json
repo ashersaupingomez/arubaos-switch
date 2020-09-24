@@ -2,8 +2,8 @@
   "name": "arubaos-switch",
   "version": "1.0.0",
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
-  "main": "index.js",
-  "module": "main.js",
+  "main": "lib/index.js",
+  "module": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

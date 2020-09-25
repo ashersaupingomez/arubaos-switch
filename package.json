@@ -24,8 +24,5 @@
   "dependencies": {
     "superagent": "^6.1.0",
     "superagent-prefix": "0.0.2"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }

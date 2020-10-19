@@ -4,6 +4,7 @@
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
   "main": "lib",
   "scripts": {
+    "docs:build": "documentation readme lib --section=API",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/ashersaupingomez/arubaos-switch#readme",
   "devDependencies": {
+    "baretest": "^2.0.0",
     "eslint": "^7.9.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0"

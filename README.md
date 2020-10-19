@@ -23,6 +23,8 @@ Superagent utilities for interacting with the ArubaOS-Switch REST API
 
 ### createClient
 
+[lib/createClient.js:14-20](https://github.com/ashersaupingomez/arubaos-switch/blob/484823d8313831ab990bb5fdf04836d2bf1f8d80/lib/createClient.js#L14-L20 "Source code on GitHub")
+
 Create a client.
 
 #### Parameters
@@ -46,17 +48,19 @@ Using explicit parameters
 const client = createClient('10.11.12.13', 'v7');
 ```
 
-Returns **superagent.agent** 
+Returns **superagent.Agent** 
 
 ### login
+
+[lib/login.js:12-20](https://github.com/ashersaupingomez/arubaos-switch/blob/484823d8313831ab990bb5fdf04836d2bf1f8d80/lib/login.js#L12-L20 "Source code on GitHub")
 
 Login a client.
 
 #### Parameters
 
--   `client` **any** 
--   `userName` **any**  (optional, default `process.env.ARUBA_OS_SWITCH_USERNAME||'manager'`)
--   `password` **any**  (optional, default `process.env.ARUBA_OS_SWITCH_PASSWORD||''`)
+-   `client` **superagent.Agent** 
+-   `userName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**  (optional, default `process.env.ARUBA_OS_SWITCH_USERNAME||'manager'`)
+-   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**  (optional, default `process.env.ARUBA_OS_SWITCH_PASSWORD||''`)
 
 #### Examples
 
@@ -64,19 +68,21 @@ Using defaults
 
 
 ```javascript
-await login(client);
+const response = await login(client);
 ```
 
 Using explicit credentials
 
 
 ```javascript
-await login(client, 'rick', 'pickle');
+const response = await login(client, 'john', 'doe');
 ```
 
-Returns **superagent.Agent** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;superagent.Response>** Login response from switch
 
 ### logout
+
+[lib/logout.js:8-11](https://github.com/ashersaupingomez/arubaos-switch/blob/484823d8313831ab990bb5fdf04836d2bf1f8d80/lib/logout.js#L8-L11 "Source code on GitHub")
 
 Logout a client.
 
@@ -87,12 +93,14 @@ Logout a client.
 #### Examples
 
 ```javascript
-await logout(client);
+const response = await logout(client);
 ```
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;superagent.Response>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;superagent.Response>** Logout response from switch
 
 ### useClient
+
+[lib/useClient.js:21-25](https://github.com/ashersaupingomez/arubaos-switch/blob/484823d8313831ab990bb5fdf04836d2bf1f8d80/lib/useClient.js#L21-L25 "Source code on GitHub")
 
 Login, execute a function, then logout.
 

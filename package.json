@@ -4,7 +4,7 @@
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
   "main": "lib",
   "scripts": {
-    "docs:build": "documentation readme lib --section=API",
+    "docs:build": "documentation readme lib --section=API --resolve=node --github",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

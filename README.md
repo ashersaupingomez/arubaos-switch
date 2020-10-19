@@ -2,6 +2,26 @@
 
 Superagent utilities for interacting with the ArubaOS-Switch REST API
 
+## Features
+
+-   Based on [superagent.Agent](https://visionmedia.github.io/superagent/#agents-for-global-state), a simple & robust http client class with in-built cookie handling.
+-   Simple & flexible API with minimal moving parts.
+-   Able to work with environment variables.
+-   Super-lightweight package.
+
+## Getting Started
+
+```javascript
+const { createClient, useClient } = require('arubaos-switch');
+
+function getSystem(client) {
+  return client
+    .get('/system');
+}
+
+const system = await useClient(createClient(), getSystem);
+```
+
 ## Testing
 
 Tests are performed on actual ArubaOS-Switch switches. Be sure to include all necessary environment variables.

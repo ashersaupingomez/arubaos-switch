@@ -12,14 +12,9 @@ Superagent utilities for interacting with the ArubaOS-Switch REST API
 ## Getting Started
 
 ```javascript
-const { createClient, useClient } = require('arubaos-switch');
+const { createClient, useClient, getHostname } = require('arubaos-switch');
 
-function getSystem(client) {
-  return client
-    .get('/system');
-}
-
-const system = await useClient(createClient(), getSystem);
+const hostname = await useClient(createClient(), getHostname);
 ```
 
 ## Testing
@@ -39,19 +34,26 @@ $ ARUBA_OS_SWITCH_HOST=10.11.12.13 npm test
 -   [createClient](#createclient)
     -   [Parameters](#parameters)
     -   [Examples](#examples)
--   [login](#login)
+-   [getHostname](#gethostname)
     -   [Parameters](#parameters-1)
     -   [Examples](#examples-1)
--   [logout](#logout)
+-   [getLLDPNeighbours](#getlldpneighbours)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples-2)
--   [useClient](#useclient)
+-   [getMACTable](#getmactable)
     -   [Parameters](#parameters-3)
     -   [Examples](#examples-3)
+-   [login](#login)
+    -   [Parameters](#parameters-4)
+    -   [Examples](#examples-4)
+-   [logout](#logout)
+    -   [Parameters](#parameters-5)
+    -   [Examples](#examples-5)
+-   [useClient](#useclient)
+    -   [Parameters](#parameters-6)
+    -   [Examples](#examples-6)
 
 ### createClient
-
-[lib/createClient.js:14-20](https://github.com/ashersaupingomez/arubaos-switch/blob/763501ab7e59408e435dd5c69346cab6d74f20f4/lib/createClient.js#L14-L20 "Source code on GitHub")
 
 Create a client.
 
@@ -78,9 +80,55 @@ const client = createClient('10.11.12.13', 'v7');
 
 Returns **superagent.Agent** 
 
-### login
+### getHostname
 
-[lib/login.js:12-20](https://github.com/ashersaupingomez/arubaos-switch/blob/763501ab7e59408e435dd5c69346cab6d74f20f4/lib/login.js#L12-L20 "Source code on GitHub")
+Get the hostname of the switch
+
+#### Parameters
+
+-   `client` **superagent.Agent** 
+
+#### Examples
+
+```javascript
+const hostname = await getHostname(client);
+```
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+### getLLDPNeighbours
+
+Get a list of neighbours via LLDP
+
+#### Parameters
+
+-   `client` **superagent.Agent** 
+
+#### Examples
+
+```javascript
+const neighbours = await getLLDPNeighbours(client);
+```
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** 
+
+### getMACTable
+
+Get a list of MAC table entries
+
+#### Parameters
+
+-   `client` **superagent.Agent** 
+
+#### Examples
+
+```javascript
+const entries = await getMACTable(client);
+```
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** 
+
+### login
 
 Login a client.
 
@@ -110,8 +158,6 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### logout
 
-[lib/logout.js:8-11](https://github.com/ashersaupingomez/arubaos-switch/blob/763501ab7e59408e435dd5c69346cab6d74f20f4/lib/logout.js#L8-L11 "Source code on GitHub")
-
 Logout a client.
 
 #### Parameters
@@ -128,41 +174,41 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ### useClient
 
-[lib/useClient.js:21-25](https://github.com/ashersaupingomez/arubaos-switch/blob/763501ab7e59408e435dd5c69346cab6d74f20f4/lib/useClient.js#L21-L25 "Source code on GitHub")
-
 Login, execute a function, then logout.
+This is a convenient method, as apposed to using `login` & `logout` functions.
 
 #### Parameters
 
 -   `client` **superagent.Agent** 
--   `fn` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `fn` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Function that uses `client` as its only parameter
 -   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 #### Examples
 
-`fn` function only accepts single `client` parameter
+Using `login` & `logout` functions
 
 
 ```javascript
-function getSystem(client) {
-  return client
-    .get('/system');
-}
+await login(client);
+
+const hostname = await getHostname(client);
+
+await logout(client);
 ```
 
 Using defaults
 
 
 ```javascript
-const system = await useClient(client, getSystem);
+const hostname = await useClient(client, getHostname);
 ```
 
 Using explicit parameters
 
 
 ```javascript
-const system = await useClient(client, getSystem, 'john', 'doe');
+const hostname = await useClient(client, getHostname, 'john', 'doe');
 ```
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** Return value of `fn`

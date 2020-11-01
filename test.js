@@ -1,26 +1,35 @@
 const baretest = require('baretest');
 const assert = require('assert');
 
-const { createClient, useClient } = require('./lib');
+const {
+  createClient,
+  getHostname,
+  getLLDPNeighbours,
+  getMACTable,
+  useClient,
+} = require('./lib');
 const { name } = require('./package');
 
 const test = baretest(name);
 
-function getSystem(client) {
-  return client
-    .get('/system');
-}
-
 const client = createClient();
 
-test('login, execute a function, then logout', async () => {
-  const { ok } = await useClient(client, getSystem);
+test('getHostname works', async () => {
+  const hostname = await useClient(client, getHostname);
 
-  assert.ok(ok);
+  assert(typeof hostname === 'string');
 });
 
-test('fails to execute a function after logout', () => {
-  assert.rejects(() => getSystem(client));
+test('getLLDPNeighbours works', async () => {
+  const neighbours = await useClient(client, getLLDPNeighbours);
+
+  assert(Array.isArray(neighbours));
+});
+
+test('getMACTable works', async () => {
+  const macs = await useClient(client, getMACTable);
+
+  assert(Array.isArray(macs));
 });
 
 test.run();

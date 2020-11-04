@@ -1,35 +1,34 @@
 const baretest = require('baretest');
 const assert = require('assert');
+const { agent, Response } = require('superagent');
 
+const { name } = require('./package');
 const {
   createClient,
-  getHostname,
-  getLLDPNeighbours,
-  getMACTable,
+  loginClient,
+  logoutClient,
   useClient,
 } = require('./lib');
-const { name } = require('./package');
 
 const test = baretest(name);
 
+function getHostname(client) {
+  return client
+    .get('/system')
+    .then(({ body }) => body.name);
+}
+
 const client = createClient();
 
-test('getHostname works', async () => {
-  const hostname = await useClient(client, getHostname);
+test('createClient', () => assert(client instanceof agent));
 
-  assert(typeof hostname === 'string');
-});
+test('loginClient', () => loginClient(client)
+  .then((response) => assert(response instanceof Response)));
 
-test('getLLDPNeighbours works', async () => {
-  const neighbours = await useClient(client, getLLDPNeighbours);
+test('logoutClient', () => logoutClient(client)
+  .then((response) => assert(response instanceof Response)));
 
-  assert(Array.isArray(neighbours));
-});
-
-test('getMACTable works', async () => {
-  const macs = await useClient(client, getMACTable);
-
-  assert(Array.isArray(macs));
-});
+test('useClient', () => useClient(client, getHostname)
+  .then((hostname) => assert(typeof hostname === 'string')));
 
 test.run();

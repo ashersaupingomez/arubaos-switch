@@ -6,20 +6,22 @@ Superagent utilities for interacting with the ArubaOS-Switch REST API
 
 -   Based on [superagent.Agent](https://visionmedia.github.io/superagent/#agents-for-global-state), a simple & robust http client class with in-built cookie handling.
 -   Simple & flexible API with minimal moving parts.
--   Able to work with environment variables.
+-   Able to work with environment variables, by default.
 -   Super-lightweight package.
 
 ## Getting Started
 
 ```javascript
-const { createClient, useClient, getHostname } = require('arubaos-switch');
+const { createClient, useClient } = require('arubaos-switch');
+
+const getHostname = require('./getHostname');
 
 const hostname = await useClient(createClient(), getHostname);
 ```
 
 ## Testing
 
-Tests are performed on actual ArubaOS-Switch switches. Be sure to include all necessary environment variables.
+Tests are performed on an actual ArubaOS-Switch switch whose credentials are defined by environment variables.
 
 ```bash
 $ ARUBA_OS_SWITCH_HOST=10.11.12.13 npm test
@@ -34,181 +36,110 @@ $ ARUBA_OS_SWITCH_HOST=10.11.12.13 npm test
 -   [createClient](#createclient)
     -   [Parameters](#parameters)
     -   [Examples](#examples)
--   [getHostname](#gethostname)
+-   [loginClient](#loginclient)
     -   [Parameters](#parameters-1)
     -   [Examples](#examples-1)
--   [getLLDPNeighbours](#getlldpneighbours)
+-   [logoutClient](#logoutclient)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples-2)
--   [getMACTable](#getmactable)
+-   [useClient](#useclient)
     -   [Parameters](#parameters-3)
     -   [Examples](#examples-3)
--   [login](#login)
-    -   [Parameters](#parameters-4)
-    -   [Examples](#examples-4)
--   [logout](#logout)
-    -   [Parameters](#parameters-5)
-    -   [Examples](#examples-5)
--   [useClient](#useclient)
-    -   [Parameters](#parameters-6)
-    -   [Examples](#examples-6)
 
 ### createClient
 
-Create a client.
-
 #### Parameters
 
--   `host` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Switch IP address (optional, default `process.env.ARUBA_OS_SWITCH_HOST`)
--   `version` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** REST API version (optional, default `process.env.ARUBA_OS_SWITCH_VERSION||'v1'`)
+-   `host` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** IP address of switch (optional, default `process.env.ARUBA_OS_SWITCH_HOST`)
+-   `version` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** ArubaOS-Switch REST API version (optional, default `process.env.ARUBA_OS_SWITCH_VERSION||'v1'`)
 
 #### Examples
-
-Using defaults
-
-
-```javascript
-const client = createClient();
-```
-
-Using explicit parameters
-
 
 ```javascript
 const client = createClient('10.11.12.13', 'v7');
 ```
 
-Returns **superagent.Agent** 
+Returns **superagent.agent** ArubaOS-Switch REST API client
 
-### getHostname
+### loginClient
 
-Get the hostname of the switch
+Note: must be performed before any requests
 
 #### Parameters
 
--   `client` **superagent.Agent** 
+-   `client` **superagent.agent** ArubaOS-Switch REST API client
+-   `userName`   (optional, default `process.env.ARUBA_OS_SWITCH_USERNAME||'manager'`)
+-   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Password of switch user (optional, default `process.env.ARUBA_OS_SWITCH_PASSWORD||''`)
+-   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Username of switch user
 
 #### Examples
 
 ```javascript
-const hostname = await getHostname(client);
+await loginClient(client, 'rick', 'wubba lubba dub-dub');
 ```
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+Returns **superagent.Request** Login request for ArubaOS-Switch REST API
 
-### getLLDPNeighbours
+### logoutClient
 
-Get a list of neighbours via LLDP
+Note: must be performed after requests
 
 #### Parameters
 
--   `client` **superagent.Agent** 
+-   `client` **superagent.agent** ArubaOS-Switch REST API client
 
 #### Examples
 
 ```javascript
-const neighbours = await getLLDPNeighbours(client);
+await logoutClient(client);
 ```
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** 
-
-### getMACTable
-
-Get a list of MAC table entries
-
-#### Parameters
-
--   `client` **superagent.Agent** 
-
-#### Examples
-
-```javascript
-const entries = await getMACTable(client);
-```
-
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** 
-
-### login
-
-Login a client.
-
-#### Parameters
-
--   `client` **superagent.Agent** 
--   `userName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**  (optional, default `process.env.ARUBA_OS_SWITCH_USERNAME||'manager'`)
--   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**  (optional, default `process.env.ARUBA_OS_SWITCH_PASSWORD||''`)
-
-#### Examples
-
-Using defaults
-
-
-```javascript
-const response = await login(client);
-```
-
-Using explicit credentials
-
-
-```javascript
-const response = await login(client, 'john', 'doe');
-```
-
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;superagent.Response>** Login response from switch
-
-### logout
-
-Logout a client.
-
-#### Parameters
-
--   `client` **superagent.Agent** 
-
-#### Examples
-
-```javascript
-const response = await logout(client);
-```
-
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;superagent.Response>** Logout response from switch
+Returns **superagent.Request** Logout request for the ArubaOS-Switch REST API
 
 ### useClient
 
-Login, execute a function, then logout.
-This is a convenient method, as apposed to using `login` & `logout` functions.
+Login a client, execute a function using the client, then logout the client,
+returning the value of the function.
+
+This is a simpler method than explicitly using `loginClient` & `logoutClient`,
+which is the typical workflow.
 
 #### Parameters
 
--   `client` **superagent.Agent** 
--   `fn` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Function that uses `client` as its only parameter
--   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `client` **superagent.agent** ArubaOS-Switch REST API client
+-   `fn` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Function which only accepts a `client` parameter
+-   `username` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Username of switch user
+-   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Password of switch user
 
 #### Examples
 
-Using `login` & `logout` functions
+Define a function:
 
 
 ```javascript
-await login(client);
+function getHostname(client) {
+  return client
+    .get('/system')
+    .then(({ body }) => body.name);
+}
+```
+
+Pass `client` & the function into `useClient`:
+
+
+```javascript
+const hostname = await useClient(client, getHostname, 'rick', 'wubba lubba dub-dub');
+```
+
+This is equivalent to:
+
+
+```javascript
+await loginClient(client, 'rick', 'wubba lubba dub-dub');
 
 const hostname = await getHostname(client);
 
-await logout(client);
-```
-
-Using defaults
-
-
-```javascript
-const hostname = await useClient(client, getHostname);
-```
-
-Using explicit parameters
-
-
-```javascript
-const hostname = await useClient(client, getHostname, 'john', 'doe');
+await logoutClient(client);
 ```
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** Return value of `fn`

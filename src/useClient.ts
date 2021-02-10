@@ -18,12 +18,12 @@ import logoutClient from './logoutClient';
  * @example <caption>Then, use the `useClient` function which returns the resolved value of `fn`</caption>
  * const response = await useClient(requestGetSystem);
  */
-export default function useClient(
-  fn: (client: SuperAgentStatic & Request) => any,
+export default function useClient<T>(
+  fn: (client: SuperAgentStatic & Request) => Promise<T>,
   client: SuperAgentStatic & Request = createClient(),
   userName: string = process.env.ARUBA_OS_SWITCH_USERNAME || 'manager',
   password: string = process.env.ARUBA_OS_SWITCH_PASSWORD || '',
-): Promise<any> {
+): Promise<T> {
   return loginClient(client, userName, password)
     .then(() => fn(client))
     .finally(() => logoutClient(client));

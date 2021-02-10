@@ -57,7 +57,7 @@ Returns **any** ArubaOS-Switch REST API client
 
 #### Parameters
 
--   `fn` **function (client: any): any** Function whose only parameter is `client`
+-   `fn` **function (client: any): [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;T>** Function whose only parameter is `client`
 -   `client` **any** ArubaOS-Switch REST API client (optional, default `createClient()`)
 -   `userName` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**  (optional, default `process.env.ARUBA_OS_SWITCH_USERNAME||'manager'`)
 -   `password` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Switch password (optional, default `process.env.ARUBA_OS_SWITCH_PASSWORD||''`)
@@ -82,7 +82,7 @@ Then, use the `useClient` function which returns the resolved value of `fn`
 const response = await useClient(requestGetSystem);
 ```
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;any>** Promise that resolves to the return value of `fn`
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;T>** Promise that resolves to the return value of `fn`
 
 ## Testing
 

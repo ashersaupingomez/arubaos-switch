@@ -19,7 +19,7 @@ function requestGetSystem(client) {
     .get('/system');
 }
 
-const response = await useClient(requestGetSystem);
+const response = await useClient({ fn: requestGetSystem });
 ```
 
 ## API

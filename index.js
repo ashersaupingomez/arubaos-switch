@@ -21,7 +21,13 @@ export function createClient(host = DEFAULT_HOST, version = DEFAULT_VERSION) {
     .use((request) => { request.url = getRequestPrefix(host, version) + request.url; });
 }
 
-export function loginClient({ client, userName = DEFAULT_USERNAME, password = DEFAULT_PASSWORD }) {
+export function loginClient({
+  host = DEFAULT_HOST,
+  version = DEFAULT_VERSION,
+  client = createClient(host, version),
+  userName = DEFAULT_USERNAME,
+  password = DEFAULT_PASSWORD,
+}) {
   return client
     .post('/login-sessions')
     .send({ userName, password });

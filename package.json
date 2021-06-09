@@ -2,7 +2,7 @@
   "name": "arubaos-switch",
   "version": "4.0.1",
   "description": "Superagent utilities for interacting with the ArubaOS-Switch REST API",
-  "module": "index",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "node test"
